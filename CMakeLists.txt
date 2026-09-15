@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(demo_api_scalar_galaxy_cpp VERSION 0.1.0 LANGUAGES CXX) # x-release-please-version
+project(demo_api_scalar_galaxy_cpp VERSION 0.2.0 LANGUAGES CXX) # x-release-please-version
 
 option(SCALAR_SDK_BUILD_TESTS "Build generated SDK smoke tests" OFF)
 
