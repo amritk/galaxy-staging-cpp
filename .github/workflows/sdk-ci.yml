@@ -1,0 +1,24 @@
+name: C++ SDK CI
+
+on:
+  push:
+  pull_request:
+
+# Least privilege for a verification-only workflow: every job below only reads the checked-out
+# tree, so the run's GITHUB_TOKEN is narrowed to that regardless of the repository's default
+# grants. Declared at the workflow level so a job added later inherits the floor.
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - run: cmake -S . -B build -DSCALAR_SDK_BUILD_TESTS=ON
+      - run: cmake --build build
+      # Verification only, never auto-fix: the SDK is generated formatted against the committed
+      # `.clang-format`, so a diff here means either hand-edited custom code or a regenerate that
+      # was not committed. `--Werror` turns the dry run's warnings into a non-zero exit.
+      - name: clang-format
+        run: find include src tests -name '*.hpp' -o -name '*.cpp' | xargs clang-format --dry-run --Werror
